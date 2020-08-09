@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ctime>
 
 void PrintIntoduction(int Difficulty);
 
@@ -6,7 +7,7 @@ bool PlayGame(int Difficulty)
 {
     PrintIntoduction(Difficulty);
 
-    const int CodeA=4, CodeB=3, CodeC=2;
+    const int CodeA=rand()%Difficulty+Difficulty, CodeB=rand()%Difficulty+Difficulty, CodeC=rand()%Difficulty+Difficulty;
     const int CodeSum = CodeA+CodeB+CodeC;
     const int CodeProduct = CodeA*CodeB*CodeC;
 
@@ -60,7 +61,7 @@ bool PlayGame(int Difficulty)
     int GuessSum = GuessA + GuessB + GuessC;
     int GuessProduct = GuessA * GuessB * GuessC;
     std::string TmpResult = "uncorrect";
-    if(GuessSum == CodeSum && GuessProduct == CodeProduct)
+    if(CodeSum == GuessSum && CodeProduct == GuessProduct)
     {
         TmpResult = "correct";
     }
@@ -77,9 +78,12 @@ void PrintIntoduction(int Difficulty)
 }
 
 int main()
-{
+{    
+    srand(time(NULL)); //create new random sequence based on time of day
+
     int LevelDifficulty = 1;
-    while(true)
+    const int MaxDifficulty = 5;
+    while(LevelDifficulty <= MaxDifficulty) // Loop game until all levels are completed
     {
         bool bLevelComplete = PlayGame(LevelDifficulty);
         std::cin.clear(); //Clears any errors
@@ -92,5 +96,6 @@ int main()
         }
         //std::cin.get();
     }
+    std::cout << "\n*** Great work agent! You got all the files! Now get out of here! ***\n";
     return 0;
 }
