@@ -6,7 +6,11 @@ void UBullCowCartridge::BeginPlay() // When the game starts
     Super::BeginPlay();
 
     const FString WordListPath = FPaths::ProjectContentDir() / TEXT("WordLists/HiddenWordList.txt"); // Set the abs path to txt file
-    FFileHelper::LoadFileToStringArray(Words, *WordListPath);   // Load words from txt file into Words array
+    FFileHelper::LoadFileToStringArrayWithPredicate(Isograms, *WordListPath, 
+        [](const FString& Word) 
+        { 
+            return Word.Len() > 4 && Word.Len() < 8 && UBullCowCartridge::IsIsogram(Word);
+        } );   // Load words from txt file into Words array, but only words which passes this []-Lambda criteria
 
     UBullCowCartridge::SetupGame();
 }
@@ -26,16 +30,11 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
 
 void UBullCowCartridge::SetupGame()
 {
-    static auto ValidWords = UBullCowCartridge::GetValidWords(Words);
-
-    // PrintLine(TEXT("The number of possible words is %i."), Words.Num() );
-    // PrintLine(TEXT("The number of valid words is %i."), ValidWords.Num() );
-
     PrintLine(TEXT("Welcome to the Bull Cows Game!"));
  
     // Must use TEXT() macro to wrap string into FString
     // HiddenWord = TEXT("cakes"); // Initialise Hidden word at the beginning // Hardcoded
-    HiddenWord = ValidWords[FMath::RandRange(0, ValidWords.Num()-1) ];
+    HiddenWord = Isograms[FMath::RandRange(0, Isograms.Num()-1) ];
     Lives = HiddenWord.Len(); //Set Lives
     bGameOver = false; //Set GameOver varibale
 
@@ -98,7 +97,7 @@ void UBullCowCartridge::ProcessGuess(const FString& Guess)
     //Show player the Bulls and Cows    
 }
 
-bool UBullCowCartridge::IsIsogram(const FString& Word) const
+bool UBullCowCartridge::IsIsogram(const FString& Word)
 {
     // For each letter 
     // Start at element [0].

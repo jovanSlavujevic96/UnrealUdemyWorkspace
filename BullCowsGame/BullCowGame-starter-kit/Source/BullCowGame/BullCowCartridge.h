@@ -18,13 +18,13 @@ class BULLCOWGAME_API UBullCowCartridge : public UCartridge
 	// Your declarations go below!
 	private:
 	FString HiddenWord; // Current word to compare 
-	TArray<FString> Words;
+	TArray<FString> Isograms;
 	int32 Lives;
 	bool bGameOver;
 
 	void SetupGame();
 	void EndGame();
 	void ProcessGuess(const FString& Guess);
-	bool IsIsogram(const FString& Word) const;
+	static bool IsIsogram(const FString& Word);
 	TArray<FString> GetValidWords(const TArray<FString>& WordList) const;
 };
