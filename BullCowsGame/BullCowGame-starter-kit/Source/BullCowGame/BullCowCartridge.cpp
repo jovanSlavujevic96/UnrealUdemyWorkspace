@@ -4,6 +4,10 @@
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
     Super::BeginPlay();
+
+    const FString WordListPath = FPaths::ProjectContentDir() / TEXT("WordLists/HiddenWordList.txt"); // Set the abs path to txt file
+    FFileHelper::LoadFileToStringArray(Words, *WordListPath);   // Load words from txt file into Words array
+
     UBullCowCartridge::SetupGame();
 }
 
@@ -22,22 +26,29 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
 
 void UBullCowCartridge::SetupGame()
 {
+    static auto ValidWords = UBullCowCartridge::GetValidWords(Words);
+
+    // PrintLine(TEXT("The number of possible words is %i."), Words.Num() );
+    // PrintLine(TEXT("The number of valid words is %i."), ValidWords.Num() );
+
     PrintLine(TEXT("Welcome to the Bull Cows Game!"));
  
-    //must use TEXT() macro to wrap string into FString
-    HiddenWord = TEXT("cakes"); //initialise Hidden word at the beginning
+    // Must use TEXT() macro to wrap string into FString
+    // HiddenWord = TEXT("cakes"); // Initialise Hidden word at the beginning // Hardcoded
+    HiddenWord = ValidWords[FMath::RandRange(0, ValidWords.Num()-1) ];
     Lives = HiddenWord.Len(); //Set Lives
     bGameOver = false; //Set GameOver varibale
 
     PrintLine(FString::Printf(TEXT("Guess the %i letter word!"), HiddenWord.Len() )); 
     PrintLine(TEXT("You have %d Lives"), Lives);    //There can be used both %d or %i for integers
     PrintLine(TEXT("Press <TAB> so you could type text\nPress <ENTER> to enter your guess...")); // Prompt Player for Guess
+    PrintLine(TEXT("Hidden word is %s."), *HiddenWord); // Debug Line
 
-    // const TCHAR HW[] = TEXT("plums"); // Example
-    // const TCHAR HW[] = {TEXT('c'), TEXT('a'), TEXT('k'), TEXT('e'), TEXT('s'), TEXT('\0') };
-    // PrintLine(TEXT("Character 1 of the hidden word is: %c"), HiddenWord[0] ); //prints 'c'
-    // PrintLine(TEXT("The 4th character of the HW is: %c"), HW[3] ); // prints 'm'
-    // PrintLine(TEXT("The hidden word is: %s"), *HiddenWord);
+    /* const TCHAR HW[] = TEXT("plums"); // Example
+    const TCHAR HW[] = {TEXT('c'), TEXT('a'), TEXT('k'), TEXT('e'), TEXT('s'), TEXT('\0') };
+    PrintLine(TEXT("Character 1 of the hidden word is: %c"), HiddenWord[0] ); //prints 'c'
+    PrintLine(TEXT("The 4th character of the HW is: %c"), HW[3] ); // prints 'm'
+    PrintLine(TEXT("The hidden word is: %s"), *HiddenWord); */
 }
 
 void UBullCowCartridge::EndGame()
@@ -109,4 +120,22 @@ bool UBullCowCartridge::IsIsogram(const FString& Word) const
         }
     }
     return true;
+}
+
+TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList) const
+{
+    TArray<FString> ValidWords;
+
+    for(int32 Index = 0; Index < WordList.Num(); Index++)
+    {
+        if(WordList[Index].Len() >= 4 && WordList[Index].Len() >= 8 && UBullCowCartridge::IsIsogram(WordList[Index]) )
+        {
+            ValidWords.Emplace(WordList[Index] );
+        }
+    }
+    // for(auto Fstr : ValidWords)
+    // {
+    //     PrintLine(TEXT("%s."), *Fstr );
+    // }
+    return ValidWords;
 }
