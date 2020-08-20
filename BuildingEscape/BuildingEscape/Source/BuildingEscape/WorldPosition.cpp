@@ -19,8 +19,10 @@ void UWorldPosition::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
-	
+	UE_LOG(LogTemp, Display, TEXT("This is a Display!") );
+	UE_LOG(LogTemp, Warning, TEXT("This is a Warning!") );
+	UE_LOG(LogTemp, Error, TEXT("This is a Error!") );
+	// https://web.archive.org/web/20190711213739/https://wiki.unrealengine.com/Logs,_Printing_Messages_To_Yourself_During_Runtime
 }
 
 
