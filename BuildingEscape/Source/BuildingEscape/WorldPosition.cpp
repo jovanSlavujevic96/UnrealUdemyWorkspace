@@ -2,6 +2,7 @@
 
 
 #include "WorldPosition.h"
+#include "GameFramework/Actor.h"
 
 // Sets default values for this component's properties
 UWorldPosition::UWorldPosition()
@@ -19,11 +20,18 @@ void UWorldPosition::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UE_LOG(LogTemp, Display, TEXT("Just a log, nothing to see") );
-	UE_LOG(LogTemp, Warning, TEXT("This is a Warning!") );
-	UE_LOG(LogTemp, Error, TEXT("This is a Error!") );
+	// FString Log = TEXT("Hello!");
+	// FString *PtrLog = &Log;
 
-	// ...
+	// Log.Len();
+	// (*PtrLog).Len();
+	// PtrLog->Len();
+	
+	// UE_LOG(LogTemp, Warning, TEXT("%s"), *Log );
+	// UE_LOG(LogTemp, Warning, TEXT("%s"), **PtrLog );
+
+	FString OwnersName = GetOwner()->GetName();
+	UE_LOG(LogTemp, Warning, TEXT("Owner's name: %s"), *OwnersName );
 }
 
 
