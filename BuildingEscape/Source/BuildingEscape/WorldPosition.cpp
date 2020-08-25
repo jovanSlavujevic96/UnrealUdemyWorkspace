@@ -20,18 +20,13 @@ void UWorldPosition::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// FString Log = TEXT("Hello!");
-	// FString *PtrLog = &Log;
+	const auto& actorRef = GetOwner();
+	UE_LOG(LogTemp, Warning, TEXT("Object's name: %s"), *actorRef->GetName() );
 
-	// Log.Len();
-	// (*PtrLog).Len();
-	// PtrLog->Len();
-	
-	// UE_LOG(LogTemp, Warning, TEXT("%s"), *Log );
-	// UE_LOG(LogTemp, Warning, TEXT("%s"), **PtrLog );
+	const auto& ObjectPosition = actorRef->GetActorLocation();
+	UE_LOG(LogTemp, Warning, TEXT("Object's location:(x,y,z,)<=>(%.3f,%.3f,%.3f)"), ObjectPosition.X, ObjectPosition.Y, ObjectPosition.Z  );
+	UE_LOG(LogTemp, Warning, TEXT("Object's location str: %s"), *ObjectPosition.ToString() );
 
-	FString OwnersName = GetOwner()->GetName();
-	UE_LOG(LogTemp, Warning, TEXT("Owner's name: %s"), *OwnersName );
 }
 
 
